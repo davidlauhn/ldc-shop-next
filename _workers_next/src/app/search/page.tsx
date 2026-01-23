@@ -45,11 +45,11 @@ export default async function SearchPage(props: {
       pageSize={result.pageSize}
       total={result.total}
       products={result.items.map((p: any) => {
-        const stat = liveStats.get(p.id)
+        const stat = liveStats.get(p.id) || { unused: 0, available: 0, locked: 0 }
         const available = p.isShared
-          ? ((stat?.unused || 0) > 0 ? INFINITE_STOCK : 0)
-          : (stat?.available ?? p.stock ?? 0)
-        const locked = stat?.locked ?? p.locked ?? 0
+          ? (stat.unused > 0 ? INFINITE_STOCK : 0)
+          : stat.available
+        const locked = stat.locked
         const stockCount = available >= INFINITE_STOCK ? INFINITE_STOCK : (available + locked)
         return {
         id: p.id,

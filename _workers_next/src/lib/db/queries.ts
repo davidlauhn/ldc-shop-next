@@ -668,6 +668,10 @@ export async function getLiveCardStats(productIds: string[]): Promise<Map<string
     const stats = new Map<string, { unused: number; available: number; locked: number }>();
     if (!ids.length) return stats;
 
+    for (const id of ids) {
+        stats.set(id, { unused: 0, available: 0, locked: 0 });
+    }
+
     try {
         await ensureCardsColumns();
     } catch (error: any) {
